@@ -5,14 +5,14 @@
  * 
  */
 public class ArmazenaResultado {
-    private int comparisons;
-    private int swaps;
+    private int numComparacoes;
+    private int numTrocasPos;
 
-    public ArmazenaResultado(int comparisons, int swaps) {
-        this.comparisons = comparisons;
-        this.swaps = swaps;
+    public ArmazenaResultado(int numComparacoes, int numTrocasPos) {
+        this.numComparacoes = numComparacoes;
+        this.numTrocasPos = numTrocasPos;
     }
 
-    public int getComparisons() { return comparisons; }
-    public int getSwaps() { return swaps; }
+    public int getNumComparacoes() { return numComparacoes; }
+    public int getNumTrocasPosicao() { return numTrocasPos; }
 }

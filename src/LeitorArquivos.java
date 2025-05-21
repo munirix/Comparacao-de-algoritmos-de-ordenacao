@@ -12,7 +12,7 @@ public class LeitorArquivos {
         String tipo = filename.split("_")[0]; // Pega tudo antes do primeiro "_"
         
         // Monta o caminho completo: "tipo/nomeDoArquivo"
-        String caminhoCompleto = tipo + File.separator + filename;
+        String caminhoCompleto = tipo + "/" + filename;
         
         // Lê o arquivo normalmente
         List<Integer> list = new ArrayList<>();
