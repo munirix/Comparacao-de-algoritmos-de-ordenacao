@@ -30,22 +30,13 @@ public class LeitorArquivos {
         }
         return arr;
     }
+
+    //testando leitor: ok
+    // public static void main(String[] args) throws IOException {
+    //     int[] arr = new int[1000];
+    //     arr = readDataset("random_10000.txt");
+    //     for (int i = 0; i < arr.length; i++) {
+    //         System.out.println(arr[i]);
+    //     }
+    // }
 }
-
-
-
- 
-// public class LeitorArquivos {
-//     public static int[] readDataset(String filename) throws IOException {
-//         List<Integer> list = new ArrayList<>();
-//         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-//             String line;
-//             while ((line = br.readLine()) != null) {
-//                 list.add(Integer.parseInt(line));
-//             }
-//         }
-//         int[] arr = new int[list.size()];
-//         for (int i = 0; i < arr.length; i++) arr[i] = list.get(i);
-//         return arr;
-//     }
-// }
