@@ -1,4 +1,3 @@
-
 /*
  * 
  * Armazena resultados

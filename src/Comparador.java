@@ -1,8 +1,7 @@
 import java.io.*;
-import java.util.*;
 /*
  * 
- * Executa testes e gerar resultados
+ * Executa testes e gera resultados
  * 
  */
 public class Comparador {
@@ -12,9 +11,10 @@ public class Comparador {
         String[] tipos = {"sorted", "reverse", "random"};
         int[] N = {10000, 20000, 40000, 80000, 100000};
 
-        List<String> results = new ArrayList<>();
-        results.add("Algoritmo, Tipo, Tamanho, Tempo (ns), Comparacoes, Trocas de Posicao");
+        String[] results = new String[1 + tipos.length * N.length * algoritmos.length];
+        results[0] = "Algoritmo, Tipo, Tamanho, Tempo (ns), Comparacoes, Trocas de Posicao";
 
+        int indice = 1;
         for (String tipo : tipos) {
             for (int tamanho : N) {
                 String filename = tipo + "_" + tamanho + ".txt";
@@ -26,7 +26,12 @@ public class Comparador {
                     int runs = 3;
 
                     for (int i = 0; i < runs; i++) {
-                        int[] copy = Arrays.copyOf(data, data.length);
+
+                        int[] copy = new int[data.length];
+                        for (int j = 0; j < data.length; j++) {
+                            copy[j] = data[j];
+                        }
+
                         long start = System.nanoTime();
                         ArmazenaResultado result = Algoritmos.runAlgorithm(algoritmo, copy);
                         long end = System.nanoTime();
@@ -35,7 +40,7 @@ public class Comparador {
                         totalTrocasPos += result.getNumTrocasPosicao();
                     }
 
-                    results.add(String.format("%s, %s, %d, %d, %d, %d",
+                    results[indice++] = (String.format("%s, %s, %d, %d, %d, %d",
                             (algoritmo), 
                             (tipo), 
                             (tamanho),
@@ -48,7 +53,11 @@ public class Comparador {
         }
 
         try (PrintWriter pw = new PrintWriter("resultados.csv")) {
-            results.forEach(pw::println);
+            for (String line : results) {
+                if (line != null) {
+                    pw.println(line);
+                }
+            }
 
         }
     }
