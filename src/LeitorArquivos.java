@@ -1,6 +1,5 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+
 /*
  * 
  * Lê arquivos de dados
@@ -8,26 +7,24 @@ import java.util.List;
  */
 public class LeitorArquivos {
     public static int[] readDataset(String filename) throws IOException {
-        // Extrai o tipo (ex: "sorted" de "sorted_10000.txt")
+        // extrai o tipo (ex: "sorted" de "sorted_10000.txt")
         String tipo = filename.split("_")[0]; // Pega tudo antes do primeiro "_"
         
-        // Monta o caminho completo: "tipo/nomeDoArquivo"
+        //"sorted/sorted_10000.txt"
         String caminhoCompleto = tipo + "/" + filename;
+
+        int tamanho = Integer.parseInt(filename.split("[_.]")[1]); // Pega o número após o '_'
         
-        // Lê o arquivo normalmente
-        List<Integer> list = new ArrayList<>();
+        //ler os valores
+        int[] arr = new int[tamanho];
         try (BufferedReader br = new BufferedReader(new FileReader(caminhoCompleto))) {
             String line;
+            int index = 0;
             while ((line = br.readLine()) != null) {
-                list.add(Integer.parseInt(line));
+                arr[index++] = Integer.parseInt(line);
             }
         }
         
-        // Converte List<Integer> para int[]
-        int[] arr = new int[list.size()];
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = list.get(i);
-        }
         return arr;
     }
 
