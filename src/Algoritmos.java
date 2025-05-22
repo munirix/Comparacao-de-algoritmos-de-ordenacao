@@ -1,4 +1,3 @@
-import java.util.Arrays;
 /*
  * 
  * Implementações dos algoritmos
@@ -241,13 +240,19 @@ public class Algoritmos {
 
     // Counting Sort
     public static ArmazenaResultado countingSort(int[] arr) {
-        if (arr.length == 0) return new ArmazenaResultado(0, 0);
-        int max = Arrays.stream(arr).max().getAsInt();
-        int[] count = new int[max + 1];
-        Arrays.fill(count, 0);
 
-        for (int num : arr) count[num]++;
-        for (int i = 1; i <= max; i++) count[i] += count[i - 1];
+        int max = 0;
+        for (int i = 0; i < arr.length; i++) {
+            max = Math.max(max, arr[i]);
+        }
+
+        int[] count = new int[max + 1];
+        for (int i = 0; i < arr.length; i++) {
+            count[arr[i]]++;
+        }
+        for (int i = 1; i <= max; i++) {
+            count[i] += count[i - 1];
+        }
 
         int[] output = new int[arr.length];
         for (int i = arr.length - 1; i >= 0; i--) {
@@ -265,13 +270,17 @@ public class Algoritmos {
 
     // Radix Sort
     public static ArmazenaResultado radixSort(int[] arr) {
-        int max = Arrays.stream(arr).max().getAsInt();
+        int max = arr[0];
+        for (int i = 1; i < arr.length; i++){
+            if (arr[i] > max){
+                max = arr[i];
+            }
+        }
         int exp = 1;
         long totalNumTrocasPos = 0;
 
-        while (max / exp > 0) {
-            totalNumTrocasPos += countingSortByDigit(arr, exp).getNumTrocasPosicao();
-            exp *= 10;
+        for (exp = 1; max / exp > 0; exp *= 10){
+            totalNumTrocasPos += countingSortPorDigito(arr, exp).getNumTrocasPosicao();
         }
         return new ArmazenaResultado(0, totalNumTrocasPos);
     }
@@ -279,13 +288,19 @@ public class Algoritmos {
     /*
      * ordenação estável de números com base em um dígito específico (unidades, dezenas, centenas, etc.)
      */
-    private static ArmazenaResultado countingSortByDigit(int[] arr, int exp) {
+    private static ArmazenaResultado countingSortPorDigito(int[] arr, int exp) {
         int[] output = new int[arr.length];
         int[] count = new int[10];
-        Arrays.fill(count, 0);
+        for(int i = 0; i < count.length; i++){
+            count[i] = 0;
+        }
 
-        for (int num : arr) count[(num / exp) % 10]++;
-        for (int i = 1; i < 10; i++) count[i] += count[i - 1];
+        for (int num : arr) 
+            count[(num / exp) % 10]++;
+
+        for (int i = 1; i < 10; i++) 
+            count[i] += count[i - 1];
+
         for (int i = arr.length - 1; i >= 0; i--) {
             int digito = (arr[i] / exp) % 10;
             output[count[digito] - 1] = arr[i];
