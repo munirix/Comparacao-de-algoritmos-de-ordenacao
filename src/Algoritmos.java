@@ -32,7 +32,7 @@ public class Algoritmos {
 
     // Bubble Sort
     public static ArmazenaResultado bubbleSort(int[] arr) {
-        int numComparacoes = 0, numTrocasPos = 0;
+        long numComparacoes = 0, numTrocasPos = 0;
         boolean houveTroca;
         for (int i = 0; i < arr.length - 1; i++) {
             houveTroca = false;
@@ -53,7 +53,7 @@ public class Algoritmos {
 
     // Insertion Sort
     public static ArmazenaResultado insertionSort(int[] arr) {
-        int numComparacoes = 0, numTrocasPos = 0;
+        long numComparacoes = 0, numTrocasPos = 0;
         for (int i = 1; i < arr.length; i++) {
             int key = arr[i];
             int j = i - 1;
@@ -73,7 +73,7 @@ public class Algoritmos {
 
     // Selection Sort
     public static ArmazenaResultado selectionSort(int[] arr) {
-        int numComparacoes = 0, numTrocasPos = 0;
+        long numComparacoes = 0, numTrocasPos = 0;
         for (int i = 0; i < arr.length - 1; i++) {
             int minIdx = i;
             for (int j = i + 1; j < arr.length; j++) {
@@ -92,12 +92,12 @@ public class Algoritmos {
 
     // Merge Sort
     public static ArmazenaResultado mergeSort(int[] arr) {
-        int[] comp_ = {0}, trocas_ = {0};
+        long[] comp_ = {0}, trocas_ = {0};
         merge_sort(arr, 0, arr.length - 1, comp_, trocas_);
         return new ArmazenaResultado(comp_[0], trocas_[0]);
     }
 
-    private static void merge_sort(int[] arr, int l, int r, int[] comp_, int[] trocas_) {
+    private static void merge_sort(int[] arr, int l, int r, long[] comp_, long[] trocas_) {
         if (l < r) {
             int m = (l + r) / 2;
             merge_sort(arr, l, m, comp_, trocas_);
@@ -106,7 +106,7 @@ public class Algoritmos {
         }
     }
 
-    private static void merge(int[] arr, int l, int m, int r, int[] comp_, int[] trocas_) {
+    private static void merge(int[] arr, int l, int m, int r, long[] comp_, long[] trocas_) {
         int n1 = m - l + 1;
         int n2 = r - m;
 
@@ -150,12 +150,12 @@ public class Algoritmos {
 
     // Quick Sort
     public static ArmazenaResultado quickSort(int[] arr) {
-        int[] comp_ = {0}, trocas_ = {0};
+        long[] comp_ = {0}, trocas_ = {0};
         quick_sort(arr, 0, arr.length - 1, comp_, trocas_);
         return new ArmazenaResultado(comp_[0], trocas_[0]);
     }
 
-    private static void quick_sort(int[] arr, int baixo, int alto, int[] comp_, int[] trocas_) {
+    private static void quick_sort(int[] arr, int baixo, int alto, long[] comp_, long[] trocas_) {
         if (baixo < alto) {
             // int pi = partition(arr, baixo, alto, comp_, trocas_);
             // quick_sort(arr, baixo, pi - 1, comp_, trocas_);
@@ -174,7 +174,7 @@ public class Algoritmos {
         }
     }
 
-    private static int partition(int[] arr, int baixo, int alto, int[] comp_, int[] trocas_) {
+    private static int partition(int[] arr, int baixo, int alto, long[] comp_, long[] trocas_) {
         int pivo = arr[alto];
         int i = baixo - 1;
         for (int j = baixo; j < alto; j++) {
@@ -188,7 +188,7 @@ public class Algoritmos {
         return i + 1;
     }
 
-    private static void trocar(int[] arr, int i, int j, int[] trocas_) {
+    private static void trocar(int[] arr, int i, int j, long[] trocas_) {
         int temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
@@ -197,7 +197,7 @@ public class Algoritmos {
 
     // Heap Sort
     public static ArmazenaResultado heapSort(int[] arr) {
-        int numComparacoes = 0, numTrocasPos = 0;
+        long numComparacoes = 0, numTrocasPos = 0;
         int n = arr.length;
 
         for (int i = n / 2 - 1; i >= 0; i--) {
@@ -207,7 +207,7 @@ public class Algoritmos {
         }
 
         for (int i = n - 1; i > 0; i--) {
-            trocar(arr, 0, i, new int[]{numTrocasPos});
+            trocar(arr, 0, i, new long[]{numTrocasPos});
             numTrocasPos++;
             ArmazenaResultado res = heapify(arr, i, 0);
             numComparacoes += res.getNumComparacoes();
@@ -217,7 +217,7 @@ public class Algoritmos {
     }
 
     private static ArmazenaResultado heapify(int[] arr, int n, int i) {
-        int numComparacoes = 0, numTrocasPos = 0;
+        long numComparacoes = 0, numTrocasPos = 0;
         int largest = i, esq = 2 * i + 1, dir = 2 * i + 2;
 
         if (esq < n) {
@@ -230,7 +230,7 @@ public class Algoritmos {
         }
 
         if (largest != i) {
-            trocar(arr, i, largest, new int[]{numTrocasPos});
+            trocar(arr, i, largest, new long[]{numTrocasPos});
             numTrocasPos++;
             ArmazenaResultado res = heapify(arr, n, largest);
             numComparacoes += res.getNumComparacoes();
@@ -255,7 +255,7 @@ public class Algoritmos {
             count[arr[i]]--;
         }
 
-        int numTrocasPos = 0;
+        long numTrocasPos = 0;
         for (int i = 0; i < arr.length; i++) {
             arr[i] = output[i];
             numTrocasPos++;
@@ -266,7 +266,8 @@ public class Algoritmos {
     // Radix Sort
     public static ArmazenaResultado radixSort(int[] arr) {
         int max = Arrays.stream(arr).max().getAsInt();
-        int exp = 1, totalNumTrocasPos = 0;
+        int exp = 1;
+        long totalNumTrocasPos = 0;
 
         while (max / exp > 0) {
             totalNumTrocasPos += countingSortByDigit(arr, exp).getNumTrocasPosicao();
@@ -291,7 +292,7 @@ public class Algoritmos {
             count[digito]--;
         }
 
-        int numTrocasPos = 0;
+        long numTrocasPos = 0;
         for (int i = 0; i < arr.length; i++) {
             arr[i] = output[i];
             numTrocasPos++;

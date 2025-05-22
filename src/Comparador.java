@@ -22,7 +22,7 @@ public class Comparador {
 
                 for (String algoritmo : algoritmos) {
                     long totalTempo = 0;
-                    int totalComp = 0, totalTrocasPos = 0;
+                    long totalComp = 0, totalTrocasPos = 0;
                     int runs = 3;
 
                     for (int i = 0; i < runs; i++) {
@@ -30,7 +30,7 @@ public class Comparador {
                         long start = System.nanoTime();
                         ArmazenaResultado result = Algoritmos.runAlgorithm(algoritmo, copy);
                         long end = System.nanoTime();
-                        totalTempo += (end - start);
+                        totalTempo += (end - start); //ns
                         totalComp += result.getNumComparacoes();
                         totalTrocasPos += result.getNumTrocasPosicao();
                     }

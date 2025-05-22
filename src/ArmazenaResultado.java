@@ -5,14 +5,14 @@
  * 
  */
 public class ArmazenaResultado {
-    private int numComparacoes;
-    private int numTrocasPos;
+    private long numComparacoes;
+    private long numTrocasPos;
 
-    public ArmazenaResultado(int numComparacoes, int numTrocasPos) {
+    public ArmazenaResultado(long numComparacoes, long numTrocasPos) {
         this.numComparacoes = numComparacoes;
         this.numTrocasPos = numTrocasPos;
     }
 
-    public int getNumComparacoes() { return numComparacoes; }
-    public int getNumTrocasPosicao() { return numTrocasPos; }
+    public long getNumComparacoes() { return numComparacoes; }
+    public long getNumTrocasPosicao() { return numTrocasPos; }
 }
