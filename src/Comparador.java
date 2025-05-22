@@ -23,9 +23,9 @@ public class Comparador {
                 for (String algoritmo : algoritmos) {
                     long totalTempo = 0;
                     long totalComp = 0, totalTrocasPos = 0;
-                    int runs = 3;
+                    //int runs = 3;
 
-                    for (int i = 0; i < runs; i++) {
+                    //for (int i = 0; i < runs; i++) {
 
                         int[] copy = new int[data.length];
                         for (int j = 0; j < data.length; j++) {
@@ -38,15 +38,15 @@ public class Comparador {
                         totalTempo += (end - start); //ns
                         totalComp += result.getNumComparacoes();
                         totalTrocasPos += result.getNumTrocasPosicao();
-                    }
+                    //}
 
                     results[indice++] = (String.format("%s, %s, %d, %d, %d, %d",
                             (algoritmo), 
                             (tipo), 
                             (tamanho),
-                            (totalTempo / runs),
-                            (totalComp / runs),
-                            (totalTrocasPos / runs)
+                            (totalTempo),// / runs),
+                            (totalComp),// / runs),
+                            (totalTrocasPos)// / runs)
                         ));
                 }
             }
