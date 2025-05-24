@@ -12,7 +12,7 @@ public class Comparador {
         int[] N = {10000, 20000, 40000, 80000, 100000};
 
         String[] results = new String[1 + tipos.length * N.length * algoritmos.length];
-        results[0] = "Algoritmo, Tipo, Tamanho, Tempo (ns), Comparacoes, Trocas de Posicao";
+        results[0] = "Algoritmo; Tipo; Tamanho; Tempo (ns); Tempo (s); Memoria (KB); Comparacoes; Trocas de Posicao";
 
         int indice = 1;
         for (String tipo : tipos) {
@@ -21,32 +21,37 @@ public class Comparador {
                 int[] data = LeitorArquivos.readDataset(filename);
 
                 for (String algoritmo : algoritmos) {
-                    long totalTempo = 0;
-                    long totalComp = 0, totalTrocasPos = 0;
-                    //int runs = 3;
+                    long totalTempoNano = 0;
+                    double totalTempoSeg = 0.0;
+                    long totalComp = 0, totalTrocasPos = 0, totalMemoria = 0;
+                    int runs = 10;
+                    int aquecimento = 3; // Execuções iniciais ignoradas
 
-                    //for (int i = 0; i < runs; i++) {
-
+                    for (int i = 0; i < runs+aquecimento; i++) {
                         int[] copy = new int[data.length];
                         for (int j = 0; j < data.length; j++) {
                             copy[j] = data[j];
                         }
 
-                        long start = System.nanoTime();
                         ArmazenaResultado result = Algoritmos.runAlgorithm(algoritmo, copy);
-                        long end = System.nanoTime();
-                        totalTempo += (end - start); //ns
-                        totalComp += result.getNumComparacoes();
-                        totalTrocasPos += result.getNumTrocasPosicao();
-                    //}
-
-                    results[indice++] = (String.format("%s, %s, %d, %d, %d, %d",
+                        
+                        if (i >= aquecimento) { // Ignora as primeiras execuções (aquecimento)
+                            totalTempoNano += result.getTempo(); //ns
+                            totalComp += result.getNumComparacoes();
+                            totalTrocasPos += result.getNumTrocasPosicao();
+                            totalMemoria += result.getMemoriaUtilizada();
+                        }
+                    }
+                    totalTempoSeg = totalTempoNano / 1000000000.0;
+                    results[indice++] = (String.format("%s; %s; %d; %d; %f; %d; %d; %d",
                             (algoritmo), 
                             (tipo), 
                             (tamanho),
-                            (totalTempo),// / runs),
-                            (totalComp),// / runs),
-                            (totalTrocasPos)// / runs)
+                            (totalTempoNano/ runs),
+                            (totalTempoSeg/ runs),
+                            (totalMemoria / (runs * 1000)),
+                            (totalComp/ runs),
+                            (totalTrocasPos/ runs)
                         ));
                 }
             }
