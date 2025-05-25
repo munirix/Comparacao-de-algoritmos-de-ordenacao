@@ -6,31 +6,37 @@
 
 public class Algoritmos {
 
-    public static ArmazenaResultado runAlgorithm(String nomeAlgoritmo, int[] arr) {
+    public static ArmazenaResultado executarAlgoritmo(String nomeAlgoritmo, int[] arr) {
         long startTime = System.nanoTime();
         long memoriaAlocada = 0L;
 
         // Executa o algoritmo
-        ArmazenaResultado resultado = executarAlgoritmo(nomeAlgoritmo, arr);
+        ArmazenaResultado resultado = null;
         // Adiciona memória teórica para estruturas temporárias
         switch (nomeAlgoritmo) {
             case "BubbleSort":
                 memoriaAlocada += arr.length * 4L + 12; 
+                resultado = bubbleSort(arr);
                 break;
             case "InsertionSort":
                 memoriaAlocada += arr.length * 4L + 12; 
+                resultado = insertionSort(arr);
                 break;
             case "SelectionSort":
                 memoriaAlocada += arr.length * 4L + 12; 
+                resultado = selectionSort(arr);
                 break;
             case "MergeSort":
                 memoriaAlocada += (arr.length * 4L * 2 )+ (12 * 3); //dois arrays temporários com tamanho de arr
+                resultado = mergeSort(arr);
                 break;
             case "QuickSort":
                 memoriaAlocada += arr.length * 4L + 12; 
+                resultado = quickSort(arr);
                 break;
             case "HeapSort":
                 memoriaAlocada += arr.length * 4L + 12; 
+                resultado = heapSort(arr);
                 break;
             case "CountingSort":
                 int max = 0;
@@ -38,32 +44,20 @@ public class Algoritmos {
                     max = Math.max(max, arr[i]);
                 }
                 memoriaAlocada += (12 + ((max + 1) * 4L)) + (12 + (arr.length * 4L)); // count[] + output[]
+                resultado = countingSort(arr);
                 break;
             case "RadixSort":
                 memoriaAlocada += (12 + (arr.length * 4L)) * 2 + (12 + (10 * 4L));
+                resultado = radixSort(arr);
                 break;
             default:
-                break;
+                throw new IllegalArgumentException("Algoritmo desconhecido");
         }
 
         resultado.setMemoriaUtilizada(memoriaAlocada);
         resultado.setTempo(System.nanoTime() - startTime);
 
         return resultado;
-    }
-
-    private static ArmazenaResultado executarAlgoritmo(String nomeAlgoritmo, int[] arr) {
-        switch(nomeAlgoritmo) {
-            case "BubbleSort": return bubbleSort(arr);
-            case "InsertionSort": return insertionSort(arr);
-            case "SelectionSort": return selectionSort(arr);
-            case "MergeSort": return mergeSort(arr);
-            case "QuickSort": return quickSort(arr);
-            case "HeapSort": return heapSort(arr);
-            case "CountingSort": return countingSort(arr);
-            case "RadixSort": return radixSort(arr);
-            default: throw new IllegalArgumentException("Algoritmo desconhecido");
-        }
     }
 
     // Bubble Sort
