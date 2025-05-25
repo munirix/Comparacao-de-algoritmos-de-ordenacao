@@ -33,7 +33,7 @@ public class Comparador {
                             copy[j] = data[j];
                         }
 
-                        ArmazenaResultado result = Algoritmos.runAlgorithm(algoritmo, copy);
+                        ArmazenaResultado result = Algoritmos.executarAlgoritmo(algoritmo, copy);
                         
                         if (i >= aquecimento) { // Ignora as primeiras execuções (aquecimento)
                             totalTempoNano += result.getTempo(); //ns
