@@ -3,59 +3,94 @@
  * Implementações dos algoritmos
  * 
  */
+
 public class Algoritmos {
 
-    // Método para executar o algoritmo especificado e retornar o resultado
-    public static ArmazenaResultado runAlgorithm(String algorithmName, int[] arr) {
-        switch (algorithmName) {
+    public static ArmazenaResultado runAlgorithm(String nomeAlgoritmo, int[] arr) {
+        long startTime = System.nanoTime();
+        long memoriaAlocada = 0L;
+
+        // Executa o algoritmo
+        ArmazenaResultado resultado = executarAlgoritmo(nomeAlgoritmo, arr);
+        // Adiciona memória teórica para estruturas temporárias
+        switch (nomeAlgoritmo) {
             case "BubbleSort":
-                return bubbleSort(arr);
+                memoriaAlocada += arr.length * 4L + 12; 
+                break;
             case "InsertionSort":
-                return insertionSort(arr);
+                memoriaAlocada += arr.length * 4L + 12; 
+                break;
             case "SelectionSort":
-                return selectionSort(arr);
+                memoriaAlocada += arr.length * 4L + 12; 
+                break;
             case "MergeSort":
-                return mergeSort(arr);
+                memoriaAlocada += (arr.length * 4L * 2 )+ (12 * 3); //dois arrays temporários com tamanho de arr
+                break;
             case "QuickSort":
-                return quickSort(arr);
+                memoriaAlocada += arr.length * 4L + 12; 
+                break;
             case "HeapSort":
-                return heapSort(arr);
+                memoriaAlocada += arr.length * 4L + 12; 
+                break;
             case "CountingSort":
-                return countingSort(arr);
+                int max = 0;
+                for (int i = 0; i < arr.length; i++) {
+                    max = Math.max(max, arr[i]);
+                }
+                memoriaAlocada += (12 + ((max + 1) * 4L)) + (12 + (arr.length * 4L)); // count[] + output[]
+                break;
             case "RadixSort":
-                return radixSort(arr);
+                memoriaAlocada += (12 + (arr.length * 4L)) * 2 + (12 + (10 * 4L));
+                break;
             default:
-                throw new IllegalArgumentException("Algoritmo desconhecido: " + algorithmName);
+                break;
+        }
+
+        resultado.setMemoriaUtilizada(memoriaAlocada);
+        resultado.setTempo(System.nanoTime() - startTime);
+
+        return resultado;
+    }
+
+    private static ArmazenaResultado executarAlgoritmo(String nomeAlgoritmo, int[] arr) {
+        switch(nomeAlgoritmo) {
+            case "BubbleSort": return bubbleSort(arr);
+            case "InsertionSort": return insertionSort(arr);
+            case "SelectionSort": return selectionSort(arr);
+            case "MergeSort": return mergeSort(arr);
+            case "QuickSort": return quickSort(arr);
+            case "HeapSort": return heapSort(arr);
+            case "CountingSort": return countingSort(arr);
+            case "RadixSort": return radixSort(arr);
+            default: throw new IllegalArgumentException("Algoritmo desconhecido");
         }
     }
 
     // Bubble Sort
     public static ArmazenaResultado bubbleSort(int[] arr) {
-        long numComparacoes = 0, numTrocasPos = 0;
-        boolean houveTroca;
-        for (int i = 0; i < arr.length - 1; i++) {
-            houveTroca = false;
-            for (int j = 0; j < arr.length - i - 1; j++) {
+        //4 bytes * N
+        long numComparacoes = 0, numTrocasPos = 0; // desconciderar
+        for (int i = 0; i < arr.length - 1; i++) { //4 bytes
+            for (int j = 0; j < arr.length - i - 1; j++) {//4 bytes
                 numComparacoes++;
                 if (arr[j] > arr[j + 1]) {
-                    int temp = arr[j];
+                    int temp = arr[j]; //4 bytes
                     arr[j] = arr[j + 1];
                     arr[j + 1] = temp;
                     numTrocasPos++;
-                    houveTroca = true;
                 }
             }
-            if (!houveTroca) break;
         }
         return new ArmazenaResultado(numComparacoes, numTrocasPos);
     }
 
     // Insertion Sort
     public static ArmazenaResultado insertionSort(int[] arr) {
-        long numComparacoes = 0, numTrocasPos = 0;
-        for (int i = 1; i < arr.length; i++) {
-            int key = arr[i];
-            int j = i - 1;
+        //4 bytes * N
+        long numComparacoes = 0, numTrocasPos = 0;// desconciderar
+        for (int i = 1; i < arr.length; i++) {//4 bytes
+            int key = arr[i];//4 bytes
+            int j = i - 1;//4 bytes
             while (j >= 0) {
                 numComparacoes++;
                 if (arr[j] > key) {
@@ -69,18 +104,19 @@ public class Algoritmos {
         }
         return new ArmazenaResultado(numComparacoes, numTrocasPos);
     }
-
+    
     // Selection Sort
     public static ArmazenaResultado selectionSort(int[] arr) {
-        long numComparacoes = 0, numTrocasPos = 0;
-        for (int i = 0; i < arr.length - 1; i++) {
-            int minIdx = i;
-            for (int j = i + 1; j < arr.length; j++) {
+        //4 bytes * N
+        long numComparacoes = 0, numTrocasPos = 0;// desconciderar
+        for (int i = 0; i < arr.length - 1; i++) {//4 bytes
+            int minIdx = i;//4 bytes
+            for (int j = i + 1; j < arr.length; j++) {//4 bytes
                 numComparacoes++;
                 if (arr[j] < arr[minIdx]) minIdx = j;
             }
             if (minIdx != i) {
-                int temp = arr[minIdx];
+                int temp = arr[minIdx];//4 bytes
                 arr[minIdx] = arr[i];
                 arr[i] = temp;
                 numTrocasPos++;
@@ -88,17 +124,19 @@ public class Algoritmos {
         }
         return new ArmazenaResultado(numComparacoes, numTrocasPos);
     }
-
+    
     // Merge Sort
     public static ArmazenaResultado mergeSort(int[] arr) {
-        long[] comp_ = {0}, trocas_ = {0};
+        //4 bytes * N
+        long[] comp_ = {0}, trocas_ = {0};// desconciderar
         merge_sort(arr, 0, arr.length - 1, comp_, trocas_);
+
         return new ArmazenaResultado(comp_[0], trocas_[0]);
     }
 
     private static void merge_sort(int[] arr, int l, int r, long[] comp_, long[] trocas_) {
-        if (l < r) {
-            int m = (l + r) / 2;
+        if (l < r) { //4 bytes * 2
+            int m = (l + r) / 2;//4 bytes
             merge_sort(arr, l, m, comp_, trocas_);
             merge_sort(arr, m + 1, r, comp_, trocas_);
             merge(arr, l, m, r, comp_, trocas_);
@@ -106,18 +144,20 @@ public class Algoritmos {
     }
 
     private static void merge(int[] arr, int l, int m, int r, long[] comp_, long[] trocas_) {
-        int n1 = m - l + 1;
-        int n2 = r - m;
+        int n1 = m - l + 1;//4 bytes
+        int n2 = r - m;//4 bytes
 
-        int[] esq = new int[n1];
-        int[] dir = new int[n2];
+        int[] esq = new int[n1]; //4 bytes * n1
+        int[] dir = new int[n2]; //4 bytes * n2
 
-        for (int i = 0; i < n1; ++i)
+        int i = 0, j = 0, k = l;//4 bytes * 3
+
+        for (i = 0; i < n1; ++i)
             esq[i] = arr[l + i];
-        for (int j = 0; j < n2; ++j)
+        for (j = 0; j < n2; ++j)
             dir[j] = arr[m + 1 + j];
 
-        int i = 0, j = 0, k = l;
+        i = 0; j = 0; k = l;
 
         while (i < esq.length && j < dir.length) {
             comp_[0]++;
@@ -149,34 +189,36 @@ public class Algoritmos {
 
     // Quick Sort
     public static ArmazenaResultado quickSort(int[] arr) {
-        long[] comp_ = {0}, trocas_ = {0};
+        //4 bytes * N
+        long[] comp_ = {0}, trocas_ = {0}; // desconciderar
         quick_sort(arr, 0, arr.length - 1, comp_, trocas_);
+
         return new ArmazenaResultado(comp_[0], trocas_[0]);
     }
 
     private static void quick_sort(int[] arr, int baixo, int alto, long[] comp_, long[] trocas_) {
-        if (baixo < alto) {
+        if (baixo < alto) { //4 bytes * 2
             // int pi = partition(arr, baixo, alto, comp_, trocas_);
             // quick_sort(arr, baixo, pi - 1, comp_, trocas_);
             // quick_sort(arr, pi + 1, alto, comp_, trocas_);
             //Overflow
 
             // Escolhe o pivô como a mediana entre primeiro, último e meio
-            int meio = baixo + (alto - baixo) / 2;
+            int meio = baixo + (alto - baixo) / 2;//4 bytes
             if (arr[meio] < arr[baixo]) trocar(arr, baixo, meio, trocas_);
             if (arr[alto] < arr[baixo]) trocar(arr, baixo, alto, trocas_);
             if (arr[meio] < arr[alto]) trocar(arr, meio, alto, trocas_);
 
-            int pi = partition(arr, baixo, alto, comp_, trocas_);
+            int pi = partition(arr, baixo, alto, comp_, trocas_);//4 bytes
             quick_sort(arr, baixo, pi - 1, comp_, trocas_);
             quick_sort(arr, pi + 1, alto, comp_, trocas_);
         }
     }
 
     private static int partition(int[] arr, int baixo, int alto, long[] comp_, long[] trocas_) {
-        int pivo = arr[alto];
-        int i = baixo - 1;
-        for (int j = baixo; j < alto; j++) {
+        int pivo = arr[alto];//4 bytes
+        int i = baixo - 1;//4 bytes
+        for (int j = baixo; j < alto; j++) {//4 bytes
             comp_[0]++;
             if (arr[j] < pivo) {
                 i++;
@@ -188,7 +230,7 @@ public class Algoritmos {
     }
 
     private static void trocar(int[] arr, int i, int j, long[] trocas_) {
-        int temp = arr[i];
+        int temp = arr[i];//4 bytes
         arr[i] = arr[j];
         arr[j] = temp;
         trocas_[0]++;
@@ -196,29 +238,30 @@ public class Algoritmos {
 
     // Heap Sort
     public static ArmazenaResultado heapSort(int[] arr) {
-        long numComparacoes = 0, numTrocasPos = 0;
-        int n = arr.length;
-
-        for (int i = n / 2 - 1; i >= 0; i--) {
-            ArmazenaResultado res = heapify(arr, n, i);
+        //4 bytes * N
+        long numComparacoes = 0, numTrocasPos = 0;// desconciderar
+        int i = 0;//4 bytes
+        
+        for (i = arr.length / 2 - 1; i >= 0; i--) {
+            ArmazenaResultado res = heapify(arr, arr.length, i); //8 bytes * 4
             numComparacoes += res.getNumComparacoes();
             numTrocasPos += res.getNumTrocasPosicao();
         }
-
-        for (int i = n - 1; i > 0; i--) {
-            trocar(arr, 0, i, new long[]{numTrocasPos});
+        
+        for (i = arr.length - 1; i > 0; i--) {
+            trocar(arr, 0, i, new long[]{numTrocasPos}); //4 bytes
             numTrocasPos++;
-            ArmazenaResultado res = heapify(arr, i, 0);
+            ArmazenaResultado res = heapify(arr, i, 0);//
             numComparacoes += res.getNumComparacoes();
             numTrocasPos += res.getNumTrocasPosicao();
         }
         return new ArmazenaResultado(numComparacoes, numTrocasPos);
     }
-
+    
     private static ArmazenaResultado heapify(int[] arr, int n, int i) {
-        long numComparacoes = 0, numTrocasPos = 0;
-        int largest = i, esq = 2 * i + 1, dir = 2 * i + 2;
-
+        long numComparacoes = 0, numTrocasPos = 0;// desconciderar
+        int largest = i, esq = 2 * i + 1, dir = 2 * i + 2;//4 bytes * 3
+        
         if (esq < n) {
             numComparacoes++;
             if (arr[esq] > arr[largest]) largest = esq;
@@ -227,62 +270,64 @@ public class Algoritmos {
             numComparacoes++;
             if (arr[dir] > arr[largest]) largest = dir;
         }
-
+        
         if (largest != i) {
-            trocar(arr, i, largest, new long[]{numTrocasPos});
+            trocar(arr, i, largest, new long[]{numTrocasPos});//4 bytes
             numTrocasPos++;
-            ArmazenaResultado res = heapify(arr, n, largest);
+            ArmazenaResultado res = heapify(arr, n, largest);//8 bytes * 4
             numComparacoes += res.getNumComparacoes();
             numTrocasPos += res.getNumTrocasPosicao();
         }
         return new ArmazenaResultado(numComparacoes, numTrocasPos);
     }
-
+    
     // Counting Sort
     public static ArmazenaResultado countingSort(int[] arr) {
-
-        int max = 0;
-        for (int i = 0; i < arr.length; i++) {
+        //4 bytes * N
+        int max = 0;//4 bytes
+        int i = 0;//4 bytes
+        for (i = 0; i < arr.length; i++) {
             max = Math.max(max, arr[i]);
         }
-
-        int[] count = new int[max + 1];
-        for (int i = 0; i < arr.length; i++) {
+        
+        int[] count = new int[max + 1];//4 bytes * max+1
+        for (i = 0; i < arr.length; i++) {
             count[arr[i]]++;
         }
-        for (int i = 1; i <= max; i++) {
+        for (i = 1; i <= max; i++) {
             count[i] += count[i - 1];
         }
-
-        int[] output = new int[arr.length];
-        for (int i = arr.length - 1; i >= 0; i--) {
+        
+        int[] output = new int[arr.length];//4 bytes * N
+        for (i = arr.length - 1; i >= 0; i--) {
             output[count[arr[i]] - 1] = arr[i];
             count[arr[i]]--;
         }
-
-        long numTrocasPos = 0;
-        for (int i = 0; i < arr.length; i++) {
+        
+        long numTrocasPos = 0; // desconciderar
+        for (i = 0; i < arr.length; i++) {
             arr[i] = output[i];
             numTrocasPos++;
         }
         return new ArmazenaResultado(0, numTrocasPos);
     }
-
+    
     // Radix Sort
     public static ArmazenaResultado radixSort(int[] arr) {
-        int max = arr[0];
-        for (int i = 1; i < arr.length; i++){
+        //4 bytes * N
+        int max = arr[0];//4 bytes
+        for (int i = 1; i < arr.length; i++){//4 bytes
             if (arr[i] > max){
                 max = arr[i];
             }
         }
-        int exp = 1;
-        long totalNumTrocasPos = 0;
+        int exp = 1;//4 bytes
+        long numTrocasPos = 0;// desconciderar
 
         for (exp = 1; max / exp > 0; exp *= 10){
-            totalNumTrocasPos += countingSortPorDigito(arr, exp).getNumTrocasPosicao();
+            numTrocasPos += countingSortPorDigito(arr, exp).getNumTrocasPosicao();
         }
-        return new ArmazenaResultado(0, totalNumTrocasPos);
+        return new ArmazenaResultado(0, numTrocasPos);
     }
 
     /*
@@ -291,27 +336,30 @@ public class Algoritmos {
     private static ArmazenaResultado countingSortPorDigito(int[] arr, int exp) {
         int[] output = new int[arr.length];
         int[] count = new int[10];
-        for(int i = 0; i < count.length; i++){
+        int i = 0;//4 bytes
+
+        for(i = 0; i < count.length; i++){
             count[i] = 0;
         }
 
-        for (int num : arr) 
+        for (int num : arr) //4 bytes
             count[(num / exp) % 10]++;
 
-        for (int i = 1; i < 10; i++) 
+        for (i = 1; i < 10; i++) 
             count[i] += count[i - 1];
 
-        for (int i = arr.length - 1; i >= 0; i--) {
-            int digito = (arr[i] / exp) % 10;
+        for (i = arr.length - 1; i >= 0; i--) {
+            int digito = (arr[i] / exp) % 10;//4 bytes
             output[count[digito] - 1] = arr[i];
             count[digito]--;
         }
 
-        long numTrocasPos = 0;
-        for (int i = 0; i < arr.length; i++) {
+        long numTrocasPos = 0;// desconciderar
+        for (i = 0; i < arr.length; i++) {
             arr[i] = output[i];
             numTrocasPos++;
         }
         return new ArmazenaResultado(0, numTrocasPos);
     }
+
 }
