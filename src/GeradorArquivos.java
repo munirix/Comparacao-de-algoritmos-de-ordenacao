@@ -15,16 +15,24 @@ public class GeradorArquivos {
         }
 
         int[] data = new int[size];
+        Random rand = new Random();
         switch (type) {
             case "sorted":
-                for (int i = 0; i < size; i++) data[i] = i;
+                data[0] = rand.nextInt(10000);
+                for (int i = 1; i < size; i++) { 
+                    data[i] = data[i - 1] + rand.nextInt(10000) + 1;
+                }
                 break;
             case "reverse":
-                for (int i = 0; i < size; i++) data[i] = size - i - 1;
+                data[0] = Integer.MAX_VALUE - rand.nextInt(10000);
+                for (int i = 1; i < size; i++) {
+                    data[i] = Math.max(data[i-1] - rand.nextInt(10000), 0);
+                }
                 break;
             case "random":
-                Random rand = new Random();
-                for (int i = 0; i < size; i++) data[i] = rand.nextInt(size * 10);
+                for (int i = 0; i < size; i++) {
+                    data[i] = rand.nextInt(Integer.MAX_VALUE);
+                }
                 break;
         }
 
