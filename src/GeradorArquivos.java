@@ -26,7 +26,7 @@ public class GeradorArquivos {
             case "reverse":
                 data[0] = size * 5 - rand.nextInt(5); 
                 for (int i = 1; i < size; i++) {
-                    data[i] = data[i - 1] - (rand.nextInt(4) + 1); 
+                    data[i] = data[i - 1] - (rand.nextInt(5) + 1); 
                 }
                 break;
             case "random":
